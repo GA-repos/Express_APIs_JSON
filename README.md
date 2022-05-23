@@ -162,10 +162,7 @@ const mongoURI =
 // any options.
 mongoose
   .connect(mongoURI, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
   })
   // The connect method is asynchronous, so we can use
   // .then/.catch to run callback functions
