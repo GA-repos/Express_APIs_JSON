@@ -145,35 +145,18 @@ anything yet.
 ```js
 // db/connection.js
 // Require Mongoose:
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-// Store the URI for our database in a variable.
-// When we're working locally, we'll have a local DB,
-// but in production, we'll have to have a database
-// that's connected to the Internet.
-const mongoURI =
-  process.env.NODE_ENV === 'production'
-    ? process.env.DB_URL
-    : 'mongodb://localhost/express-mc';
+//connect to database
+mongoose.connect('mongodb://localhost:27017/mongoose-cats-CRUD', {
+    useNewUrlParser: true
+})
 
-// Use the mongoose connect method to connect to the
-// database.  The connect method takes two arguments:
-// the address of the database and an object containing
-// any options.
-mongoose
-  .connect(mongoURI, {
-    useUnifiedTopology: true,
-  })
-  // The connect method is asynchronous, so we can use
-  // .then/.catch to run callback functions
-  // when the connection is opened or errors out.
-  .then((instance) =>
-    console.log(`Connected to db: ${instance.connections[0].name}`)
-  )
-  .catch((error) => console.log('Connection failed!', error));
+const db = mongoose.connection
 
-// Export mongoose so we can use it elsewhere
-module.exports = mongoose;
+db.on('connected', () => {
+    console.log(`Connected to MongoDB at ${db.host}:${db.port}`)
+})
 ```
 ### Build our models
 
@@ -184,7 +167,7 @@ Here's an example for the Bookmark model, let's just talk through this.
 
 ```js
 // require the mongoose package from the connection pool
-const mongoose = require("../connection");
+const mongoose = require("mongoose");
 
 // make a new schema with 2 properties, and assign it to a variable
 const BookmarkSchema = new mongoose.Schema({
